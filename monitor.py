@@ -1,23 +1,27 @@
 #!/usr/bin/env python
 # __author__ = 'cahitonur'
 
-from subprocess import Popen, check_output, CalledProcessError, STDOUT
-from postman import send_mail
 import time
+import subprocess
+from postman import send_mail
+
 
 sender = 'monitor@example.com'
 receiver = 'you@example.com'
+subject = 'MySql Server was down..'
+message = '..and started automatically @'
 
 
 def check_status():
     try:
-        check_output(['lsof', '-i', ':3306'], stderr=STDOUT)
+        subprocess.check_output(['lsof', '-i', ':3306'], stderr=subprocess.STDOUT)
 
-    except CalledProcessError:
+    except subprocess.CalledProcessError:
 
-        Popen(['service', 'mysql', 'start'])
+        subprocess.Popen(['service', 'mysql', 'start'])
+        msg = message + time.ctime()
         time.sleep(5)
-        send_mail('MySql Server was down.', '/root/mysql_monitor/mail_text', sender, receiver)
+        send_mail(subject, msg, sender, receiver)
 
 if __name__ == '__main__':
     check_status()
