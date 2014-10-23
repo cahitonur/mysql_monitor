@@ -13,6 +13,7 @@ message = '..and started automatically @'
 
 
 def check_status():
+
     try:
         subprocess.check_output(['lsof', '-i', ':3306'], stderr=subprocess.STDOUT)
 
